@@ -302,7 +302,8 @@ def artist_events(artist, location=None, country="US", language="en"):
         + ": the artist may not be touring" + (" there" if location else ""))
     return {"search_information": {"query": q, "link": results_link(q, country, language)},
             "artist": {"name": panel["name"], "link": results_link(panel["name"], country, language)},
-            "near": panel["near"], "count": len(panel["events"]), "events": panel["events"]}
+            # without a location Google's header says "Near you" (the exit IP): not a place
+            "near": panel["near"] if location else None, "count": len(panel["events"]), "events": panel["events"]}
 
 
 # ---- suggestions ----------------------------------------------------------------------------------------------

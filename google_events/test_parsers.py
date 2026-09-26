@@ -70,6 +70,9 @@ def test_refusal_stub_and_served_chunk():
     ("Jan 4, 9:00 PM", ("2027-01-04", "21:00")),           # past month -> next year
     ("Wed, Sep 30, 2026, 12:00 AM", ("2026-09-30", "00:00")),
     ("12. Okt., 20:00", ("2026-10-12", "20:00")),
+    ("Thu, Aug 6, 7:00 PM", ("2026-08-06", "19:00")),     # the weekday picks the year: a past event
+    ("Fri, Aug 6, 7:00 PM", ("2027-08-06", "19:00")),
+    ("Sep 26 Sat 7:00 PM", ("2026-09-26", "19:00")),      # artist-panel row
     ("Tomorrow", (None, None)),
     (None, (None, None)),
 ])

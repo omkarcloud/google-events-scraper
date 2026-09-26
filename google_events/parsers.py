@@ -76,10 +76,38 @@ def _month_of(word):
     return None
 
 
-def _infer_year(month, day, now):
-    """Carousel dates carry no year: the next occurrence of month/day
-    (a date a month or more in the past means next year)."""
+_WEEKDAYS = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}
+
+
+def _weekday_of(text):
+    """The weekday a date text names ("Sat, Sep 26" / "Thu 7:00 PM"), or None."""
+    for word in re.findall(r"[^\W\d_]{3,}", text or ""):
+        wd = _WEEKDAYS.get(word.lower()[:3])
+        if wd is not None and word.lower() in ("mon", "tue", "tues", "wed", "thu", "thur", "thurs", "fri", "sat", "sun",
+                                               "monday", "tuesday", "wednesday", "thursday", "friday", "saturday",
+                                               "sunday"):
+            return wd
+    return None
+
+
+def _infer_year(month, day, now, weekday=None):
+    """Carousel dates carry no year: the next occurrence of month/day (a
+    date a month or more in the past means next year). A weekday in the text
+    decides instead when it matches exactly one nearby year — Google's
+    panels sometimes still list an event that already happened
+    ("Thu, Aug 6" seen on 2026-09-26 is Aug 6 2026, not 2027)."""
     today = now.date()
+    if weekday is not None:
+        hits = []
+        for year in (today.year - 1, today.year, today.year + 1):
+            try:
+                candidate = date(year, month, day)
+            except ValueError:
+                continue
+            if candidate.weekday() == weekday:
+                hits.append(candidate)
+        if len(hits) == 1:
+            return hits[0]
     for year in (today.year, today.year + 1):
         try:
             candidate = date(year, month, day)
@@ -119,7 +147,7 @@ def parse_card_datetime(value, now=None):
             except ValueError:
                 when = None
         else:
-            when = _infer_year(month, day, now)
+            when = _infer_year(month, day, now, _weekday_of(raw))
         return (when.isoformat() if when else None), parse_clock(rest)
     return None, None
 
