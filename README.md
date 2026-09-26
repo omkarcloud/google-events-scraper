@@ -72,7 +72,7 @@ curl "http://localhost:8000/search?query=concerts+in+New+York"
       "title": "Phoebe Bridgers",
       "schedule": { "start_date": "2026-09-26", "start_time": "19:30" },
       "venue": { "name": "Barclays Center", "locality": "Prospect Heights" },
-      "thumbnail": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQi1MIxWtbyAFvSg8..."
+      "thumbnail": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQi1MIxWtbyAFvSg8cp9yRPock97nrWik8ra5F3PAhDvhbBSmm1DJCbSQV0lSmAeDAWYYgAjYxeqzSDzGM"
     },
     {
       "position": 3,
